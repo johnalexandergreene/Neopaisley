@@ -1,0 +1,73 @@
+Neopaisley is a general shape-grammar based geometric composition building system.
+
+The composition is a tree of nesting shapes
+Each shape comprehensively differentiated by its children, puzzlewise.
+A shape can have a single outer edge, thus it is a Polygon.
+Or, a shape can have a single outer edge and 1..n inner edges (holes), thus it is a Yard.
+Our composition building process goes like this
+  1. Given a shape
+  2. Get a transform (called a Jig)
+  3. Use the transform to get child shapes for that shape
+  4. Repeat for all shapes, recursively, until satisfied
+
+--------------------------
+
+We have an engine (or several engines) for working with shapes and jigs
+
+shapes and jigs use the shape and jig interface
+
+
+We abide by the dot-stripe composition paradigm
+(or you could say it's inevitable and implicit)
+Which is to say, our development transform takes 2 forms.
+  Stripe : section the target shape into stripe-sections
+  Dot : create a pattern of islands within the target shape, polkadots or whatever freestanding sections, untouching the target edge/s.
+
+It is pluginnable.
+  Our engine will take a jig-source that we can query for CJig class objects. Query by tag-string.
+  
+
+
+It is an engine wor working with a a certain kind of shape and a shape-operator.
+
+The shape is an object that implements interface CShape
+
+The operator is an object that implements interface CJig
+
+We build trees of shapes by 
+1. apply a jig to a root-shape, thus producing new shapes.  
+2. apply jigs to those new shapes, thus producing new shapes 
+3. and so on.
+
+interface CShape implements TreeNode,Tagged{
+  
+  List<Edge> getEdges();
+  getTagsetc
+  getAttribute(String key,Object thing)
+
+} 
+
+A CShape with only one edge is a polygon
+A CShape with 2..n edges is a yard
+  The first edge being its outer edge and the others being holes 
+
+interface CEdge{
+
+  List<Point2D> getPoints();
+
+}
+
+interface CJig{
+  
+  List<CShape> spawn(CShape target);
+
+}
+
+interface CJigSource{
+
+  CJig getJig(CShape shape,String filter)
+
+}
+
+filter is a list of tags. Get only jigs that have tags contained in tagfilter string. Is this too primitive?
+
